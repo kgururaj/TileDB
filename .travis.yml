@@ -35,6 +35,10 @@ matrix:
       os: osx
       env: INSTALL_TYPE=basic
 
+addons:
+  sonarcloud:
+    organization: "omicsdataautomation"
+
 before_install:
     - pushd $TRAVIS_BUILD_DIR/.travis && openssl aes-256-cbc -K $encrypted_8ed00c38c616_key -iv $encrypted_8ed00c38c616_iv -in r.tar.enc -out r.tar -d && tar xf r.tar && popd;
 
@@ -85,3 +89,7 @@ after_success:
       fi
     # Uploading report to CodeCov
     - bash <(curl -s https://codecov.io/bash) || echo "Codecov did not collect coverage reports"
+    # Static Analysis using SonarCloud
+    - if [[ $TRAVIS_OS_NAME == linux ]]; then
+        sonar-scanner
+      fi
