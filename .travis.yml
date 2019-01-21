@@ -91,5 +91,5 @@ after_success:
     - bash <(curl -s https://codecov.io/bash) || echo "Codecov did not collect coverage reports"
     # Static Analysis using SonarCloud
     - if [[ $TRAVIS_OS_NAME == linux ]]; then
-        sonar-scanner
+        sonar-scanner -Dsonar.verbose=true -Dsonar.sources=$TRAVIS_BUILD_DIR/core -X
       fi
