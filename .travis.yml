@@ -15,26 +15,6 @@ matrix:
       os: linux
       env: INSTALL_TYPE=basic
 
-    - name: "Basic build - all codec"
-      os: linux
-      env: INSTALL_TYPE=basic INSTALL_CODEC=true
-
-    - name: "HDFS support"
-      os: linux
-      env: INSTALL_TYPE=hdfs
-
-    - name: "GCS support"
-      os: linux
-      env: INSTALL_TYPE=gcs
-
-    - name: "Azure support"
-      os: linux
-      env: INSTALL_TYPE=azure
-
-    - name: "Basic build - OSX"
-      os: osx
-      env: INSTALL_TYPE=basic
-
 addons:
   sonarcloud:
     organization: "omicsdataautomation"
@@ -68,13 +48,9 @@ install:
     - echo "cmake -DCMAKE_BUILD_TYPE=Coverage -DENABLE_ZSTD=$ENABLE_ZSTD -DENABLE_BLOSC=$ENABLE_BLOSC -DENABLE_LZ4=$ENABLE_LZ4 .."
 
     - cmake -DCMAKE_BUILD_TYPE=Coverage -DENABLE_ZSTD=$ENABLE_ZSTD -DENABLE_BLOSC=$ENABLE_BLOSC -DENABLE_LZ4=$ENABLE_LZ4 ..
-    - if [[ $TRAVIS_OS_NAME == linux && $INSTALL_TYPE == basic ]]; then
-        echo "Using wrapper to run make";
-        build-wrapper-linux-x86-64 --out-dir $TRAVIS_BUILD_DIR/bw-output make -j4;
-        echo "wrapper DONE";
-      else
-        make -j4;
-      fi
+    - echo "Using wrapper to run make";
+    - build-wrapper-linux-x86-64 --out-dir $TRAVIS_BUILD_DIR/bw-output make -j4;
+    - echo "wrapper DONE";
 
 before_script:
     - lcov --directory $TILEDB_BUILD_DIR --zerocounters
@@ -97,11 +73,9 @@ after_success:
     # Uploading report to CodeCov
     - bash <(curl -s https://codecov.io/bash) || echo "Codecov did not collect coverage reports"
     # Static Analysis using SonarCloud
-    - if [[ $TRAVIS_OS_NAME == linux && INSTALL_TYPE == basic ]]; then
-        echo "Start Sonar Scanning...";
-        echo "Find bw-output json";
-        find $TRAVIS_BUILD_DIR/bw-output -name "*json";
-        echo "Find Done";
-        sonar-scanner -Dsonar.verbose=true -Dsonar.organization=omicsdataautomation -Dsonar.projectKey=OmicsDataAutomation_TileDB -Dsonar.projectName="ODA.TileDB" -Dsonar.projectVersion=1.0 -Dsonar.projectBaseDir=$TRAVIS_BUILD_DIR -Dsonar.sources=core -Dsonar.cfamily.build-wrapper-output=bw-output -Dsonar.cfamily.build-wrapper-output=bw-output -Dsonar.sourceEncoding=UTF-8 -X;
-        echo "Sonar Scanning Done";
-      fi
+    - echo "Start Sonar Scanning...";
+    - echo "Find bw-output json";
+    - find $TRAVIS_BUILD_DIR/bw-output -name "*json";
+    - echo "Find Done";
+    - sonar-scanner -Dsonar.verbose=true -Dsonar.organization=omicsdataautomation -Dsonar.projectKey=OmicsDataAutomation_TileDB -Dsonar.projectName="ODA.TileDB" -Dsonar.projectVersion=1.0 -Dsonar.projectBaseDir=$TRAVIS_BUILD_DIR -Dsonar.sources=core -Dsonar.cfamily.build-wrapper-output=bw-output -Dsonar.cfamily.build-wrapper-output=bw-output -Dsonar.sourceEncoding=UTF-8 -X;
+    - echo "Sonar Scanning Done";
