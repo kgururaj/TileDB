@@ -68,7 +68,7 @@ install:
     - echo "cmake -DCMAKE_BUILD_TYPE=Coverage -DENABLE_ZSTD=$ENABLE_ZSTD -DENABLE_BLOSC=$ENABLE_BLOSC -DENABLE_LZ4=$ENABLE_LZ4 .."
 
     - cmake -DCMAKE_BUILD_TYPE=Coverage -DENABLE_ZSTD=$ENABLE_ZSTD -DENABLE_BLOSC=$ENABLE_BLOSC -DENABLE_LZ4=$ENABLE_LZ4 ..
-    - if [[ $TRAVIS_OS_NAME == linux && $INSTALL_TYPE == basic]]; then
+    - if [[ $TRAVIS_OS_NAME == linux && $INSTALL_TYPE == basic ]]; then
         echo "Using wrapper to run make";
         build-wrapper-linux-x86-64 --out-dir $TRAVIS_BUILD_DIR/bw-output make -j4;
         echo "wrapper DONE";
