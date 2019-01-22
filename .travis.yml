@@ -69,7 +69,7 @@ install:
 
     - cmake -DCMAKE_BUILD_TYPE=Coverage -DENABLE_ZSTD=$ENABLE_ZSTD -DENABLE_BLOSC=$ENABLE_BLOSC -DENABLE_LZ4=$ENABLE_LZ4 ..
     - if [[ $TRAVIS_OS_NAME == linux && $INSTALL_TYPE == basic]]; then
-        echo "Using build-wrapper to run make;
+        echo "Using build-wrapper to run make";
         build-wrapper --out-dir $TRAVIS_BUILD_DIR/bw-output "make -j 4";
         echo "build-wrapper DONE";
       else
