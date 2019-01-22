@@ -93,6 +93,6 @@ after_success:
     # Static Analysis using SonarCloud
     - if [[ $TRAVIS_OS_NAME == linux ]]; then
         echo "Start Sonar Scanning...";
-        sonar-scanner -Dsonar.verbose=true -Dsonar.projectKey=OmicsDataAutomation_TileDB -Dsonar.organization=omicsdataautomation -Dsonar.projectBaseDir=$TRAVIS_BUILD_DIR -Dsonar.sources=core -X;
+        sonar-scanner -Dsonar.verbose=true -Dsonar.organization=omicsdataautomation -Dsonar.projectKey=OmicsDataAutomation_TileDB -Dsonar.projectName="ODA.TileDB" -Dsonar.projectVersion=1.0 -Dsonar.projectBaseDir=$TRAVIS_BUILD_DIR -Dsonar.sources=core -Dsonar.cfamily.build-wrapper-output=bw-output -Dsonar.cfamily.build-wrapper-output=bw-output -X;
         echo "Sonar Scanning Done";
       fi
